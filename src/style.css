@@ -4,12 +4,14 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  /* background: linear-gradient(to bottom, #040426, #173185); */
+  background: linear-gradient(to bottom, #040426, #061b5e);
 }
 
 #app {
-  max-width: 1280px;
+  width: 100%;
+  height: 100vh;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 * {

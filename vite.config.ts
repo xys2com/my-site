@@ -31,7 +31,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@/styles/element/index.scss" as *;`, // 全局SCSS变量
+        // additionalData: `@use "@/styles/element/index.scss" as *;`, // 全局SCSS变量
       },
     },
   },
@@ -48,7 +48,7 @@ export default defineConfig({
     outDir: "dist", // 打包输出目录
     assetsDir: "assets", // 静态资源目录
     sourcemap: false, // 生产环境关闭sourcemap
-    minify: "terser", // 代码压缩工具
+    minify: "esbuild", // 代码压缩工具
     terserOptions: {
       compress: {
         drop_console: true, // 移除console
