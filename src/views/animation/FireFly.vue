@@ -17,7 +17,7 @@ const createFirefly = () => {
     ex: width,
     ey: height,
     speed: 1,
-    mousedownSpeedRatio: 2,
+    mousedownSpeedRatio: 10,
     createSpeed: 128,
     followMouse: true,
     success: async () => {

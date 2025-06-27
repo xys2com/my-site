@@ -100,6 +100,8 @@ class Firefly {
   mousedownSpeedRatio: number = 10; // 鼠标按下时的速度变化比
   mouseDownSign: boolean = false; // 鼠标按下标识
   mousePoi: Poi = { x: 0, y: 0 }; // 鼠标位置 在mouseMove 事件中更新
+  randomPaths: Poi[][] = []; // 路径群
+  randomPathItv: number = 0; // 定时器
   constructor(options: any) {
     const {
       el,
@@ -159,12 +161,23 @@ class Firefly {
     if (typeof success === "function") success();
   }
 }
-
+const setRandomPath = function () {
+  this.randomPaths = [];
+  const pathNum = random(1, 4); // 1 - 5条路径
+  for (let i = 0; i < pathNum; i++) {
+    let path = this.createPathRandom(random(4, 6)); // 产生4 - 8个点位
+    this.randomPaths.push(path);
+  }
+};
 const init = function () {
   const img0 = fireflyImg(0);
   const img1 = fireflyImg(1);
   this.fireflyImg.push(img0, img1);
-  this.fittingPath = this.createPathRandom(6); // 生成拟合路径6个点位
+  // this.fittingPath = this.createPathRandom(6); // 生成拟合路径6个点位
+  this.setRandomPath();
+  this.randomPathItv = setInterval(() => {
+    this.setRandomPath();
+  }, 1e3 * 5);
   this.mouseMove = throttle(($event) => {
     this.updatePoi($event);
   }, 50);
@@ -190,13 +203,21 @@ const updatePoi = function ($event) {
 const mouseDown = function () {
   this.mouseDownSign = true;
   this.setFirefliesVt(this.mousedownSpeedRatio);
-  this.fittingPath = this.createPathRandom(6); // 生成拟合路径6个点位
+  this.setRandomPath();
+  clearInterval(this.randomPathItv);
+  this.randomPathItv = null;
+  // this.fittingPath = this.createPathRandom(6); // 生成拟合路径6个点位
 };
 // 鼠标释放
 const mouseUp = function () {
   this.mouseDownSign = false;
   this.setFirefliesVt(1);
+  this.setRandomPath();
+  this.randomPathItv = setInterval(() => {
+    this.setRandomPath();
+  }, 1e3 * 10);
 };
+// 设置运动速率
 const setFirefliesVt = function (speed: number = 1) {
   this.itemSpeed = speed;
 };
@@ -211,7 +232,7 @@ const createRandomPoint = function () {
   };
 };
 
-// 向path 中添加一个点位
+// 向单个item path 中添加一个点位
 const addPointToPath = function (item) {
   const point = this.createRandomPoint();
   item.paths.push(point);
@@ -221,7 +242,25 @@ const addPointToPath = function (item) {
 const createPathRandom = function (dotNum: number = 20) {
   let nowi = 0;
   let paths: Poi[] = [];
-  paths.push(this.startPoi);
+  let fourPois = [
+    {
+      x: 0,
+      y: 0,
+    },
+    {
+      x: this.maxPoi.x,
+      y: 0,
+    },
+    {
+      x: this.maxPoi.x,
+      y: this.maxPoi.y,
+    },
+    {
+      x: 0,
+      y: this.maxPoi.y,
+    },
+  ];
+  paths.push(fourPois[random(0, 3)]);
   while (nowi < dotNum) {
     const poi = this.createRandomPoint();
     paths.push(poi);
@@ -280,7 +319,7 @@ const createFirefly = function (useCopy: boolean = false, index: number) {
   // index 越小 t与 copy path的偏差越大
   let copyIndex = random(0, 2);
   const copyItem = this.fireflies[copyIndex];
-  const radius = random(20, 60) / 10;
+  const radius = random(10, 30) / 10;
   const imgType = random(0, 1);
   const frame = useCopy
     ? copyItem.frame + random(-120, 120)
@@ -293,7 +332,7 @@ const createFirefly = function (useCopy: boolean = false, index: number) {
   const alpha = random(2, 10) / 10; // 初始透明度
   const flashV = random(2, 6) / 500; // 闪烁速度
 
-  const offset = 100 + index;
+  const offset = 100;
   //
   const paths = !useCopy
     ? this.pathRandom
@@ -364,7 +403,7 @@ function catmullRom(p0, p1, p2, p3, t) {
   };
 }
 
-// 点位catmull rom 插值计算
+// 计算每一帧路径
 const flyPath = function (item, index) {
   let {
     paths,
@@ -421,7 +460,11 @@ const flyPath = function (item, index) {
     if (!this.mouseDownSign) {
       // 如果路径只剩下3个点位
       if (pathIndex >= paths.length - 4) {
-        this.addPointToPath(item);
+        // this.addPointToPath(item);
+        const path = this.randomPaths[index % this.randomPaths.length].map(
+          (e) => getCircleRandomPoint(e.x, e.y, random(-50, 50))
+        );
+        paths.push(...path);
       }
     } else {
       // 切掉当前下标以后的点位
@@ -429,8 +472,8 @@ const flyPath = function (item, index) {
       // 放入两个后置点位
       const x = this.mousePoi.x;
       const y = this.mousePoi.y;
-      paths.push(getCircleRandomPoint(x, y, random(50, 200)));
-      paths.push(getCircleRandomPoint(x, y, random(50, 200)));
+      paths.push(getCircleRandomPoint(x, y, random(-50, 100)));
+      paths.push(getCircleRandomPoint(x, y, random(-50, 100)));
     }
     // 如果路径已经走完两个点位
     if (pathIndex >= 3) {
@@ -468,6 +511,7 @@ interface Firefly {
   mouseUp(event: HTMLElementEventMap): void;
   increasedFirefly(count: number): void;
   createPathRandom(dotNum: number): Poi[];
+  setRandomPath(): void;
   createPathIncreasing(): void;
   createRandomPoint(): void;
   setFirefliesVt(): void;
@@ -487,6 +531,7 @@ Firefly.prototype.setFirefliesVt = setFirefliesVt;
 Firefly.prototype.addPointToPath = addPointToPath;
 Firefly.prototype.createRandomPoint = createRandomPoint;
 Firefly.prototype.increasedFirefly = increasedFirefly;
+Firefly.prototype.setRandomPath = setRandomPath;
 Firefly.prototype.createPathRandom = createPathRandom;
 Firefly.prototype.createPathIncreasing = createPathIncreasing;
 Firefly.prototype.createFirefly = createFirefly;
