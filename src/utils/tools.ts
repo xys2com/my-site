@@ -115,3 +115,39 @@ export const getAngleBetweenLines = (line1, line2, fullAngle = true) => {
     ((fullAngle ? angle : Math.min(angle, Math.PI - angle)) * 180) / Math.PI
   );
 };
+
+// copy
+export const copy = (val: string) => {
+  if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard
+      .writeText(val)
+      .then(() => {
+        return Promise.resolve(true);
+      })
+      .catch(() => {
+        return Promise.reject(false);
+      });
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.readOnly = true;
+    textarea.style.position = "absolute";
+    textarea.style.top = "0px";
+    textarea.style.left = "-9999px";
+    textarea.style.zIndex = "-9999";
+    textarea.value = val;
+    document.body.appendChild(textarea);
+    if ((textarea as any).createTextRange) {
+      textarea.select();
+    } else {
+      textarea.setSelectionRange(0, val.length);
+      textarea.focus();
+    }
+    const result = document.execCommand("Copy");
+    document.body.removeChild(textarea);
+    if (result) {
+      return Promise.resolve(true);
+    } else {
+      return Promise.reject(false);
+    }
+  }
+};

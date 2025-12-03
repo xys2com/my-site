@@ -5,11 +5,14 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import viteCompression from "vite-plugin-compression";
+import svgAutoGenPlugin from "./vite-plugins/vite-plugin-svg-autogen";
+import memeAutoExport from "./vite-plugins/vite-plugin-meme-auto-export";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-
+    svgAutoGenPlugin(),
+    memeAutoExport(),
     AutoImport({
       resolvers: [ElementPlusResolver()],
       imports: ["vue", "vue-router"],
@@ -31,7 +34,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        // additionalData: `@use "@/styles/element/index.scss" as *;`, // 全局SCSS变量
+        additionalData: `@use "@/styles/app.scss" as *;`, // 全局SCSS变量
       },
     },
   },

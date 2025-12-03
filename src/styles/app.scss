@@ -1,0 +1,32 @@
+@mixin lightFontBlue($color) {
+  color: $color;
+  text-shadow: 0px 0px 10px #426ab3, 0px 0px 10px #426ab3, 0px 0px 10px #426ab3,
+    0px 0px 10px #426ab3;
+}
+@font-face {
+  font-family: "muyao";
+  src: url("@/assets/font/Muyao-Softbrush.TTF") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "fzlt";
+  src: url("@/assets/font/FZZJ-XHLTJW.TTF") format("truetype");
+  font-display: swap;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: #cccccc;
+  cursor: pointer;
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+  background: #f1f1f1;
+  cursor: pointer;
+}

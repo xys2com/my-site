@@ -10,7 +10,7 @@ const createFirefly = () => {
   const height = document.body.clientHeight;
   const width = document.body.clientWidth;
   const firefly = new Firefly({
-    count: 2048,
+    count: 4096,
     el: ".firefly",
     sx: 0,
     sy: document.body.clientHeight,
@@ -18,7 +18,7 @@ const createFirefly = () => {
     ey: height,
     speed: 1,
     mousedownSpeedRatio: 10,
-    createSpeed: 128,
+    createSpeed: 512,
     followMouse: true,
     success: async () => {
       await nextTick();

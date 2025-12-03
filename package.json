@@ -16,10 +16,11 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@types/node": "^24.0.1",
+    "@types/node": "^24.10.1",
     "@types/web": "^0.0.241",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",
+    "glob": "^13.0.0",
     "sass": "^1.59.3",
     "sass-loader": "^13.2.1",
     "typescript": "~5.8.3",

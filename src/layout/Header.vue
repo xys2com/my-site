@@ -10,6 +10,67 @@
         {{ item.name }}
       </div>
     </div>
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+      <defs>
+        <filter id="squiggly-0">
+          <feTurbulence
+            id="turbulence"
+            baseFrequency="0.02"
+            numOctaves="3"
+            result="noise"
+            seed="0"
+          />
+          <feDisplacementMap
+            id="displacement"
+            in="SourceGraphic"
+            in2="noise"
+            scale="6"
+          />
+        </filter>
+        <filter id="squiggly-1">
+          <feTurbulence
+            id="turbulence"
+            baseFrequency="0.02"
+            numOctaves="3"
+            result="noise"
+            seed="1"
+          />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" />
+        </filter>
+
+        <filter id="squiggly-2">
+          <feTurbulence
+            id="turbulence"
+            baseFrequency="0.02"
+            numOctaves="3"
+            result="noise"
+            seed="2"
+          />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" />
+        </filter>
+        <filter id="squiggly-3">
+          <feTurbulence
+            id="turbulence"
+            baseFrequency="0.02"
+            numOctaves="3"
+            result="noise"
+            seed="3"
+          />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" />
+        </filter>
+
+        <filter id="squiggly-4">
+          <feTurbulence
+            id="turbulence"
+            baseFrequency="0.02"
+            numOctaves="3"
+            result="noise"
+            seed="4"
+          />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" />
+        </filter>
+      </defs>
+    </svg>
   </div>
 </template>
 
@@ -21,7 +82,7 @@ import Firefly from "@/utils/animation/firefly";
 const active = ref(0);
 const createFirefly = ({ x, y }) => {
   const firefly = new Firefly({
-    // count: 10,
+    count: 500,
     el: ".header",
     sx: x,
     ex: 1920,
@@ -32,6 +93,8 @@ const createFirefly = ({ x, y }) => {
       firefly.canvas.style.position = "absolute";
       firefly.canvas.style.left = "0";
       firefly.canvas.style.top = "0";
+      firefly.canvas.style.userSelect = "none";
+      firefly.canvas.style.zIndex = "1";
       const id = `firefly_${Math.random().toString(32).slice(-8)}`;
       animation.$register({
         name: "firefly",
@@ -90,18 +153,27 @@ const itemClick = ($event, item, i) => {
 </script>
 
 <style lang="scss" scoped>
-@font-face {
-  font-family: "muyao";
-  src: url("@/assets/font/compress/Muyao-Softbrush.TTF") format("truetype");
-}
-@font-face {
-  font-family: "fzlt";
-  src: url("@/assets/font/compress/FZZJ-XHLTJW.TTF") format("truetype");
-}
-@mixin lightFontBlue($color) {
-  color: $color;
-  text-shadow: 0px 0px 10px #426ab3, 0px 0px 10px #426ab3, 0px 0px 10px #426ab3,
-    0px 0px 10px #426ab3;
+@keyframes squiggly-anim {
+  0% {
+    -webkit-filter: url("#squiggly-0");
+    filter: url("#squiggly-0");
+  }
+  25% {
+    -webkit-filter: url("#squiggly-1");
+    filter: url("#squiggly-1");
+  }
+  50% {
+    -webkit-filter: url("#squiggly-2");
+    filter: url("#squiggly-2");
+  }
+  75% {
+    -webkit-filter: url("#squiggly-3");
+    filter: url("#squiggly-3");
+  }
+  100% {
+    -webkit-filter: url("#squiggly-4");
+    filter: url("#squiggly-4");
+  }
 }
 @keyframes textShow {
   0% {
@@ -138,7 +210,7 @@ const itemClick = ($event, item, i) => {
 .header {
   width: 100vw;
   height: 80px;
-  background: #00000099;
+  background: #0000;
   position: absolute;
   top: 0;
   transition: all 0.3s;
@@ -147,11 +219,16 @@ const itemClick = ($event, item, i) => {
   align-items: center;
   padding: 0 50px;
   min-width: 1600px;
+  transition: all 0.3s;
+  &:hover {
+    background: #0009;
+  }
   .nav-list {
     height: 100%;
     display: flex;
     flex: 1;
     font-family: "fzlt";
+    z-index: 10;
     .item {
       font-family: "muyao";
       font-size: 24px;
@@ -170,6 +247,7 @@ const itemClick = ($event, item, i) => {
       }
       &.active {
         @include lightFontBlue(#fff);
+        animation: squiggly-anim 0.36s linear infinite;
       }
     }
   }

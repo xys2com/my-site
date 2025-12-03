@@ -1,5 +1,8 @@
 <template>
   <RouterView />
+  <DevTool />
 </template>
-
-<style scoped></style>
+<script lang="ts" setup>
+import DevTool from "@/views/dev/Index.vue";
+</script>
+<style lang="scss"></style>

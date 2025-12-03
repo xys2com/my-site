@@ -7,19 +7,6 @@ import {
   isDOM,
 } from "@/utils/tools";
 
-declare global {
-  interface Array<T> {
-    lastItem: T | undefined;
-    firstItem: T | undefined;
-  }
-}
-Array.prototype.lastItem = function () {
-  return this[this.length - 1];
-};
-Array.prototype.firstItem = function () {
-  return this[0];
-};
-
 interface Poi {
   x: number;
   y: number;
@@ -83,8 +70,8 @@ const getCircleRandomPoint = (cx, cy, r) => {
   return { x, y };
 };
 class Firefly {
-  context: null | any = null; // 上下文canvas画笔
-  canvas: null | any = null; // canvas画布
+  context: null | CanvasRenderingContext2D = null; // 上下文canvas画笔
+  canvas: null | HTMLCanvasElement = null; // canvas画布
   creating: boolean = false; // 是否处于创建中
   fireflies: Item[] = []; // 每个firefly对象
   fireflyImg: Object[] = []; // 两种萤火虫 一种黄绿色 一种绿黄色
@@ -102,7 +89,7 @@ class Firefly {
   mousePoi: Poi = { x: 0, y: 0 }; // 鼠标位置 在mouseMove 事件中更新
   randomPaths: Poi[][] = []; // 路径群
   randomPathItv: number = 0; // 定时器
-  constructor(options: any) {
+  constructor(options) {
     const {
       el,
       count = 50,
@@ -117,7 +104,7 @@ class Firefly {
       followMouse = false,
       mousedownSpeedRatio = 10,
     }: {
-      el: string | any;
+      el: string | HTMLElement;
       count: number;
       ex: number;
       ey: number;
@@ -271,22 +258,22 @@ const createPathRandom = function (dotNum: number = 20) {
 
 // 递增到最大值产生路径
 const createPathIncreasing = function () {
-  let nowx = this.startPoi.x;
-  let paths = [];
+  let nowx: number = this.startPoi.x;
+  let paths: Poi[] = [];
   paths.push(this.startPoi);
-  const maxx = this.maxPoi.x;
-  const stepx = maxx / 20;
+  const maxx: number = this.maxPoi.x;
+  const stepx: number = maxx / 20;
   const miny = 5;
-  const maxy = this.maxPoi.y;
+  const maxy: number = this.maxPoi.y;
   while (nowx < maxx) {
-    let x = random(nowx, nowx + stepx);
-    let y = random(miny, maxy);
+    let x: number = random(nowx, nowx + stepx);
+    let y: number = random(miny, maxy);
     nowx = x;
     paths.push({ x, y });
     // 一定几率打转
     let spin = random(0, 100) < 20;
     if (spin) {
-      const preItem = paths.lastItem(1);
+      const preItem: Poi = paths.lastItem(1);
       // preItem.y >= y 斜率正比  =>  /
       // preItem.y < y 斜率反比   =>  \
       const positive = preItem.y > y;
@@ -367,7 +354,7 @@ const increasedFirefly = function (count: number) {
   let index = 0;
   this.creating = true;
   const itv = setInterval(() => {
-    const useCopy = random(0, 100) > 10 && this.fireflies.length > 3;
+    const useCopy = random(0, 100) > 5 && this.fireflies.length > 3;
     if (index < count) {
       index++;
       this.createFirefly(useCopy, index);
@@ -472,8 +459,8 @@ const flyPath = function (item, index) {
       // 放入两个后置点位
       const x = this.mousePoi.x;
       const y = this.mousePoi.y;
-      paths.push(getCircleRandomPoint(x, y, random(-50, 100)));
-      paths.push(getCircleRandomPoint(x, y, random(-50, 100)));
+      paths.push(getCircleRandomPoint(x, y, random(-50, 50)));
+      paths.push(getCircleRandomPoint(x, y, random(-50, 50)));
     }
     // 如果路径已经走完两个点位
     if (pathIndex >= 3) {
@@ -495,8 +482,8 @@ const fly = function () {
   // const ctx = this.context;
   // ctx.save();
   // let grd = ctx.createLinearGradient(0, 0, 1, this.maxPoi.y);
-  // grd.addColorStop(0, "#04042622");
-  // grd.addColorStop(1, "#061b5e22");
+  // grd.addColorStop(0, "#04042633");
+  // grd.addColorStop(1, "#061b5e33");
   // ctx.fillStyle = grd;
   // ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   // ctx.restore();
