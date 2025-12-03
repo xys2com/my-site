@@ -11,11 +11,13 @@
     </div>
     <SvgList v-model="view.svg" />
     <BulletScreen v-model="view.bullet" />
+    <CurriculumVitae />
   </div>
 </template>
 <script lang="ts" setup>
 import SvgList from "./SvgDemo.vue";
 import BulletScreen from "./BulletScreen.vue";
+import CurriculumVitae from "./CurriculumVitae.vue";
 import { random } from "@/utils/tools";
 const view = reactive({
   svg: false,
@@ -52,6 +54,8 @@ const showDialog = (key) => {
   background: #0000;
   padding: 20px 0;
   transition: all 0.3s;
+  border-right: 0.5px solid #589dda66;
+  box-shadow: 0px 0 6px #589dda66;
   &:hover {
     background: #0005;
   }

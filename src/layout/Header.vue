@@ -10,67 +10,6 @@
         {{ item.name }}
       </div>
     </div>
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-      <defs>
-        <filter id="squiggly-0">
-          <feTurbulence
-            id="turbulence"
-            baseFrequency="0.02"
-            numOctaves="3"
-            result="noise"
-            seed="0"
-          />
-          <feDisplacementMap
-            id="displacement"
-            in="SourceGraphic"
-            in2="noise"
-            scale="6"
-          />
-        </filter>
-        <filter id="squiggly-1">
-          <feTurbulence
-            id="turbulence"
-            baseFrequency="0.02"
-            numOctaves="3"
-            result="noise"
-            seed="1"
-          />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" />
-        </filter>
-
-        <filter id="squiggly-2">
-          <feTurbulence
-            id="turbulence"
-            baseFrequency="0.02"
-            numOctaves="3"
-            result="noise"
-            seed="2"
-          />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" />
-        </filter>
-        <filter id="squiggly-3">
-          <feTurbulence
-            id="turbulence"
-            baseFrequency="0.02"
-            numOctaves="3"
-            result="noise"
-            seed="3"
-          />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" />
-        </filter>
-
-        <filter id="squiggly-4">
-          <feTurbulence
-            id="turbulence"
-            baseFrequency="0.02"
-            numOctaves="3"
-            result="noise"
-            seed="4"
-          />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" />
-        </filter>
-      </defs>
-    </svg>
   </div>
 </template>
 
@@ -153,28 +92,6 @@ const itemClick = ($event, item, i) => {
 </script>
 
 <style lang="scss" scoped>
-@keyframes squiggly-anim {
-  0% {
-    -webkit-filter: url("#squiggly-0");
-    filter: url("#squiggly-0");
-  }
-  25% {
-    -webkit-filter: url("#squiggly-1");
-    filter: url("#squiggly-1");
-  }
-  50% {
-    -webkit-filter: url("#squiggly-2");
-    filter: url("#squiggly-2");
-  }
-  75% {
-    -webkit-filter: url("#squiggly-3");
-    filter: url("#squiggly-3");
-  }
-  100% {
-    -webkit-filter: url("#squiggly-4");
-    filter: url("#squiggly-4");
-  }
-}
 @keyframes textShow {
   0% {
     opacity: 0;
@@ -220,6 +137,8 @@ const itemClick = ($event, item, i) => {
   padding: 0 50px;
   min-width: 1600px;
   transition: all 0.3s;
+  border-bottom: 0.5px solid #589dda66;
+  box-shadow: 0 0px 6px #589dda66;
   &:hover {
     background: #0009;
   }
@@ -231,7 +150,7 @@ const itemClick = ($event, item, i) => {
     z-index: 10;
     .item {
       font-family: "muyao";
-      font-size: 24px;
+      font-size: 32px;
       color: #fff0b8;
       height: 100%;
       display: flex;
@@ -239,7 +158,7 @@ const itemClick = ($event, item, i) => {
       justify-content: center;
       cursor: pointer;
       margin-right: 30px;
-      width: 100px;
+      min-width: 100px;
       font-weight: bold;
       transition: all 0.5s;
       &:hover {

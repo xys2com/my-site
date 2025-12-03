@@ -237,7 +237,7 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 .bullet-screen {
-  height: 100vh;
+  height: calc(100vh - 80px);
   width: 100vw;
   left: 0;
   z-index: 9;
@@ -402,7 +402,7 @@ onUnmounted(() => {
           width: 100px;
           color: #fff;
           border-radius: 8px;
-          font-size: 24px;
+          font-size: 30px;
           text-align: center;
           line-height: 48px;
           cursor: pointer;
@@ -413,14 +413,14 @@ onUnmounted(() => {
           }
         }
         .back {
-          background: #5283ff;
-          // text-shadow: 0 0 2px #fff;
-          box-shadow: 0 0 1px #5283ff;
+          background: #ce52ff;
+          text-shadow: 0 0 2px #fff;
+          box-shadow: 0 0 10px #ce52ff;
         }
         .submit {
-          background: #ff5252;
-          text-shadow: 0 0 1px #fff;
-          box-shadow: 0 0 6px #ff5252;
+          background: #ff9d52;
+          text-shadow: 0 0 2px #fff;
+          box-shadow: 0 0 10px #ff9d52;
         }
       }
     }
