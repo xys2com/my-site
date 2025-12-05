@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      padding: 0px;
+      margin: 0;
+      font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+      box-sizing: border-box;
+      background: #000;
+      color: #fff;
+      text-align: center;
+    }
+
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #000;
+    }
+  </style>
+  <body></body>
+  <script>
+    function $(s) {
+      let el = document.querySelectorAll(s);
+      return el.length === 1 ? el[0] : el;
+    }
+    //定义范围内的随机数
+    function random(min, max) {
+      if (arguments.length < 2) {
+        max = min;
+        min = 0;
+      }
+      if (min > max) {
+        var hold = max;
+        max = min;
+        min = hold;
+      }
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  </script>
+  <script>
+    class g2048 {
+      constructor() {
+        this.canvas = document.createElement("canvas");
+        this.ctx = this.canvas.getContext("2d");
+        // 一个格子100px
+        this.canvas.width = 450;
+        this.canvas.height = 450;
+        document.body.appendChild(this.canvas);
+        this.score = 0;
+        this.gameEnd = true;
+        this.colors = {
+          2: "#eee4da",
+          4: "#ede0c8",
+          8: "#f2b179",
+          16: "#f59563",
+          32: "#f67c5f",
+          64: "#f65e3b",
+          128: "#edcf72",
+          256: "#edcc61",
+          512: "#edc850",
+          1024: "#edc53f",
+          2048: "#edc22e",
+        };
+        this.cells = [
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+        ];
+        this.init();
+        this.bindEvents();
+      }
+      bindEvents() {
+        document.addEventListener("keydown", (e) => {
+          const directions = {
+            ArrowLeft: "left",
+            KeyA: "left",
+            ArrowRight: "right",
+            KeyD: "right",
+            ArrowUp: "up",
+            KeyW: "up",
+            ArrowDown: "down",
+            KeyS: "down",
+          };
+          if (directions[e.code]) {
+            this.move(directions[e.code]);
+            e.preventDefault();
+          }
+        });
+      }
+      randomCell() {
+        let x = random(0, 3);
+        let y = random(0, 3);
+        if (this.cells[x][y] == 0) {
+          this.cells[x][y] = random(1, 10) < 10 ? 1 * 2 : 2 * 2;
+        } else {
+          this.randomCell();
+        }
+      }
+      init() {
+        this.randomCell();
+        this.randomCell();
+        this.draw();
+      }
+      draw() {
+        this.ctx.clearRect(0, 0, 450, 450);
+        for (let i = 0; i < 4; i++) {
+          for (let j = 0; j < 4; j++) {
+            const score = this.cells[i][j];
+            const color = this.colors[score];
+            const x = (j + 1) * 10 + 100 * j;
+            const y = (i + 1) * 10 + 100 * i;
+
+            this.ctx.save();
+            if (!score) {
+              this.ctx.fillStyle = "#cdc1b4";
+              this.ctx.fillRect(x, y, 100, 100);
+              this.ctx.restore();
+              continue;
+            } else {
+              this.ctx.fillStyle = color;
+              this.ctx.fillRect(x, y, 100, 100);
+            }
+            this.ctx.font = "30px Arial";
+            this.ctx.fillStyle = "#776e65";
+            this.ctx.textAlign = "center";
+            this.ctx.textBaseline = "middle";
+            this.ctx.fillText(score, x + 50, y + 50);
+            this.ctx.restore();
+          }
+        }
+      }
+      move(dir) {
+        if (dir == "left" || dir == "right") {
+          // 检查每一行
+          for (let i = 0; i < 4; i++) {
+            let row = this.cells[i].filter((e) => !!e);
+            if (!row.length) continue;
+            for (let i = 0; i < row.length - 1; i++) {
+              let a = row[i];
+              let b = row[i + 1];
+              if (a == b) {
+                row[i + 1] = a + b;
+                row[i] = 0;
+                i++;
+              }
+            }
+            row = row.filter((e) => !!e);
+            let newrow = [];
+            if (dir == "left") {
+              for (let i = 0; i < 4; i++) {
+                let val = row[i];
+                newrow.push(val ? val : 0);
+              }
+            } else {
+              row = row.reverse();
+              for (let i = 3; i >= 0; i--) {
+                let val = row[i];
+                newrow.push(val ? val : 0);
+              }
+            }
+            this.cells[i] = newrow;
+          }
+        } else {
+          // 检查每一列
+          for (let i = 0; i < 4; i++) {
+            let col = [];
+            for (let j = 0; j < 4; j++) {
+              col.push(this.cells[j][i]);
+            }
+            col = col.filter((e) => !!e);
+            if (!col.length) continue;
+            for (let i = 0; i < col.length - 1; i++) {
+              let a = col[i];
+              let b = col[i + 1];
+              if (a == b) {
+                col[i + 1] = a + b;
+                col[i] = 0;
+                i++;
+              }
+            }
+            col = col.filter((e) => !!e);
+            let newcol = [];
+            if (dir == "up") {
+              for (let i = 0; i < 4; i++) {
+                let val = col[i];
+                newcol.push(val ? val : 0);
+              }
+            } else {
+              col = col.reverse();
+              for (let i = 3; i >= 0; i--) {
+                let val = col[i];
+                newcol.push(val ? val : 0);
+              }
+            }
+            for (let j = 0; j < 4; j++) {
+              this.cells[j][i] = newcol[j];
+            }
+          }
+        }
+        this.randomCell();
+        this.draw();
+      }
+    }
+    new g2048();
+  </script>
+</html>

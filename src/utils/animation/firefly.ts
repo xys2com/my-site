@@ -45,7 +45,6 @@ const fireflyImg = function (type) {
     radius
   );
   grd.addColorStop(0.0, "#fff");
-  grd.addColorStop(0.2, "#fff");
   grd.addColorStop(0.3, `${color}`);
   grd.addColorStop(0.5, `${color}cc`);
   grd.addColorStop(0.6, `${color}aa`);
@@ -202,7 +201,7 @@ const mouseUp = function () {
   this.setRandomPath();
   this.randomPathItv = setInterval(() => {
     this.setRandomPath();
-  }, 1e3 * 10);
+  }, 1e3 * 5);
 };
 // 设置运动速率
 const setFirefliesVt = function (speed: number = 1) {
@@ -231,20 +230,20 @@ const createPathRandom = function (dotNum: number = 20) {
   let paths: Poi[] = [];
   let fourPois = [
     {
-      x: 0,
-      y: 0,
+      x: this.maxPoi.x / 3,
+      y: this.maxPoi.y / 3,
     },
     {
-      x: this.maxPoi.x,
-      y: 0,
+      x: (this.maxPoi.x / 3) * 2,
+      y: this.maxPoi.y / 3,
     },
     {
-      x: this.maxPoi.x,
-      y: this.maxPoi.y,
+      x: (this.maxPoi.x / 3) * 2,
+      y: (this.maxPoi.y / 3) * 2,
     },
     {
-      x: 0,
-      y: this.maxPoi.y,
+      x: this.maxPoi.x / 3,
+      y: (this.maxPoi.y / 3) * 2,
     },
   ];
   paths.push(fourPois[random(0, 3)]);
@@ -258,13 +257,13 @@ const createPathRandom = function (dotNum: number = 20) {
 
 // 递增到最大值产生路径
 const createPathIncreasing = function () {
-  let nowx: number = this.startPoi.x;
+  let nowx: number = this.maxPoi.x / 3;
   let paths: Poi[] = [];
   paths.push(this.startPoi);
-  const maxx: number = this.maxPoi.x;
+  const maxx: number = (this.maxPoi.x / 3) * 2;
   const stepx: number = maxx / 20;
-  const miny = 5;
-  const maxy: number = this.maxPoi.y;
+  const miny = this.maxPoi.y / 3;
+  const maxy: number = (this.maxPoi.y / 3) * 2;
   while (nowx < maxx) {
     let x: number = random(nowx, nowx + stepx);
     let y: number = random(miny, maxy);
@@ -306,7 +305,8 @@ const createFirefly = function (useCopy: boolean = false, index: number) {
   // index 越小 t与 copy path的偏差越大
   let copyIndex = random(0, 2);
   const copyItem = this.fireflies[copyIndex];
-  const radius = random(10, 30) / 10;
+  const maxType = random(1, 100) == 1;
+  const radius = maxType ? random(30, 100) : random(30, 600) / 30;
   const imgType = random(0, 1);
   const frame = useCopy
     ? copyItem.frame + random(-120, 120)
@@ -319,7 +319,7 @@ const createFirefly = function (useCopy: boolean = false, index: number) {
   const alpha = random(2, 10) / 10; // 初始透明度
   const flashV = random(2, 6) / 500; // 闪烁速度
 
-  const offset = random(100, 400);
+  const offset = random(100);
   //
   const paths = !useCopy
     ? this.pathRandom
@@ -327,8 +327,8 @@ const createFirefly = function (useCopy: boolean = false, index: number) {
       : this.createPathIncreasing() // 总路径
     : copyItem.paths.map((e) => {
         return {
-          x: e.x + random(-offset, offset) / 10,
-          y: e.y + random(-offset, offset) / 10,
+          x: e.x + random(-offset, offset),
+          y: e.y + random(-offset, offset),
         };
       });
   const item = {
@@ -353,7 +353,8 @@ const increasedFirefly = function (count: number) {
   if (this.creating) return;
   let index = 0;
   this.creating = true;
-  const itv = setInterval(() => {
+  const delay = 1e3 / this.createSpeed;
+  let itv = setInterval(() => {
     const useCopy = random(0, 100) > 5 && this.fireflies.length > 3;
     if (index < count) {
       index++;
@@ -361,9 +362,10 @@ const increasedFirefly = function (count: number) {
       // if (useCopy) this.createFirefly(true);
     } else {
       clearInterval(itv);
+      itv = null;
       this.creating = false;
     }
-  }, 1e3 / this.createSpeed);
+  }, delay);
 };
 
 // catmull rom 插值计算
@@ -459,8 +461,8 @@ const flyPath = function (item, index) {
       // 放入两个后置点位
       const x = this.mousePoi.x;
       const y = this.mousePoi.y;
-      paths.push(getCircleRandomPoint(x, y, random(-50, 50)));
-      paths.push(getCircleRandomPoint(x, y, random(-50, 50)));
+      paths.push(getCircleRandomPoint(x, y, random(-100, 100)));
+      paths.push(getCircleRandomPoint(x, y, random(-100, 100)));
     }
     // 如果路径已经走完两个点位
     if (pathIndex >= 3) {

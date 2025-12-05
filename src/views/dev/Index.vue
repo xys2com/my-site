@@ -17,18 +17,21 @@
     <SvgList v-model="view.svg" />
     <BulletScreen v-model="view.bullet" />
     <CurriculumVitae v-model="view.horse" />
+    <HtmlView v-model="view.html" />
   </div>
 </template>
 <script lang="ts" setup>
 import SvgList from "./SvgDemo.vue";
 import BulletScreen from "./BulletScreen.vue";
 import CurriculumVitae from "./CurriculumVitae.vue";
+import HtmlView from "./HtmlView.vue";
 import { random } from "@/utils/tools";
 const view = reactive({
   svg: false,
   bullet: false,
   curriculumVitae: false,
   horse: false,
+  html: false,
 });
 
 const btns = ref([
@@ -48,6 +51,12 @@ const btns = ref([
     name: "horse",
     key: "horse",
     title: "牛马简历",
+    color: `hsl(${random(0, 360)}, 75%, 50%)`,
+  },
+  {
+    name: "javascript",
+    key: "html",
+    title: "JS小玩意",
     color: `hsl(${random(0, 360)}, 75%, 50%)`,
   },
 ]);
