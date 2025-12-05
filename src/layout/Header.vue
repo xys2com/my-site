@@ -14,12 +14,13 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, nextTick } from "vue";
 import animation from "@/utils/animation";
 import Firefly from "@/utils/animation/firefly";
 // 创建头部萤火虫动画
 const active = ref(0);
+const created = ref(false);
 const createFirefly = ({ x, y }) => {
+  if (created.value) return;
   const firefly = new Firefly({
     count: 500,
     el: ".header",
@@ -29,6 +30,7 @@ const createFirefly = ({ x, y }) => {
     sy: y,
     success: async () => {
       await nextTick();
+      created.value = true;
       firefly.canvas.style.position = "absolute";
       firefly.canvas.style.left = "0";
       firefly.canvas.style.top = "0";
@@ -84,10 +86,11 @@ const navlist = reactive([
 ]);
 const itemClick = ($event, item, i) => {
   active.value = i;
-  item.clickFun({
-    x: $event.clientX,
-    y: $event.clientY,
-  });
+  if (item.clickFun)
+    item.clickFun({
+      x: $event.clientX,
+      y: $event.clientY,
+    });
 };
 </script>
 

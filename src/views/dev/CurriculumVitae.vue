@@ -5,21 +5,46 @@
   * @LastEditors: xuyushu
 -->
 <template>
-  <div class="curriculum-vitae">
-    <div class="warp">
-      <div class="page" :style="$PageStyle">
-        <div class="content">
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-            <g filter="url(#conformv2)">
-              <text x="0" y="36" font-size="36px" color="">内容</text>
-            </g>
-          </svg>
+  <div v-if="show" class="curriculum-vitae" @click="show = false">
+    <div
+      class="warp"
+      :style="`width:${$Width + 10}px;height:${$Height}px`"
+      @click.stop
+    >
+      <div class="page-container">
+        <div class="page" :style="$PageStyle">
+          <div class="content">
+            <div class="name">内容</div>
+          </div>
+        </div>
+        <div class="page" :style="$PageStyle">
+          <div class="content">
+            <div class="name">内容</div>
+          </div>
         </div>
       </div>
+      <Horse />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
+import Horse from "./Horse.vue";
+const $props = defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false,
+  },
+});
+const $emit = defineEmits(["update:modelValue"]);
+const show = computed({
+  get() {
+    return $props.modelValue;
+  },
+  set(v) {
+    $emit("update:modelValue", v);
+  },
+});
+
 const DPI = Math.round(window.devicePixelRatio * 96);
 const UniMM = (DPI / 96) * 3.78; // 1mm 的像素
 
@@ -38,32 +63,65 @@ const $PageStyle = computed(() => {
 .curriculum-vitae {
   height: 100vh;
   width: 100vw;
-  background: #fff3;
+  background: #0003;
   left: 0;
   top: 0;
   position: fixed;
 }
 .warp {
-  padding: 80px 0;
-}
-.page {
-  margin: 0 auto;
+  margin: 0px auto;
+  margin-top: 120px;
   position: relative;
-  * {
-    z-index: 9;
+}
+.page-container {
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  .page {
     position: relative;
-  }
-  &::before {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 100%;
-    filter: url("#roughpaper");
-    background: #efeecb;
-    z-index: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .content {
+      filter: url(#conform);
+      color: #000;
+      font-size: 20px;
+      .name {
+        font-size: 32px;
+        font-weight: bold;
+        text-shadow: 0px 0px 3px #000;
+      }
+      .title {
+        font-size: 28px;
+        font-weight: bold;
+      }
+      .item {
+      }
+      .label {
+        font-weight: bold;
+      }
+      .text-val {
+      }
+      .subitem {
+      }
+    }
+    * {
+      z-index: 9;
+      position: relative;
+    }
+    &::before {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 100%;
+      filter: url("#roughpaper");
+      background: #efeecb;
+      z-index: 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
   }
 }
 </style>

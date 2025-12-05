@@ -6,12 +6,17 @@
 -->
 <template>
   <div class="dev-tool">
-    <div v-for="btn in btns" class="switch-btn" @click="showDialog(btn.key)">
+    <div
+      v-for="btn in btns"
+      class="switch-btn"
+      @click="showDialog(btn.key)"
+      :title="btn.title"
+    >
       <Svg :name="btn.name" :color="btn.color" size="80" />
     </div>
     <SvgList v-model="view.svg" />
     <BulletScreen v-model="view.bullet" />
-    <CurriculumVitae />
+    <CurriculumVitae v-model="view.horse" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -22,17 +27,27 @@ import { random } from "@/utils/tools";
 const view = reactive({
   svg: false,
   bullet: false,
+  curriculumVitae: false,
+  horse: false,
 });
 
 const btns = ref([
   {
-    name: "shengqibiaoqing",
+    name: "huaihuaibiaoqing",
     key: "svg",
+    title: "SVG自动注册组件",
     color: `hsl(${random(0, 360)}, 75%, 50%)`,
   },
   {
     name: "bullet",
     key: "bullet",
+    title: "滚动弹幕（DOM版本）",
+    color: `hsl(${random(0, 360)}, 75%, 50%)`,
+  },
+  {
+    name: "horse",
+    key: "horse",
+    title: "牛马简历",
     color: `hsl(${random(0, 360)}, 75%, 50%)`,
   },
 ]);

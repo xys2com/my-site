@@ -259,6 +259,8 @@ onUnmounted(() => {
       position: absolute;
       text-shadow: 1px 0px 2px #000, 0px 1px 2px #000, -1px 0px 2px #000,
         0px -1px 2px #000;
+      text-shadow: 1px 0px 2px #fff8, 0px 1px 2px #fff8, -1px 0px 2px #fff8,
+        0px -1px 2px #fff8;
       color: #fff;
       font-size: 16px;
       opacity: 0.8;

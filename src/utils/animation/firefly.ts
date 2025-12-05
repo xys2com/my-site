@@ -319,7 +319,7 @@ const createFirefly = function (useCopy: boolean = false, index: number) {
   const alpha = random(2, 10) / 10; // 初始透明度
   const flashV = random(2, 6) / 500; // 闪烁速度
 
-  const offset = 100;
+  const offset = random(100, 400);
   //
   const paths = !useCopy
     ? this.pathRandom

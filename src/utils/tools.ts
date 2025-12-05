@@ -27,7 +27,7 @@ export const asyncLoadImage = (src) => {
   });
 };
 // 随机值
-export const random = function (n, r) {
+export const random = function (n, r?) {
   // eslint-disable-next-line
   if ((arguments.length < 2 && ((r = n), (n = 0)), n > r)) {
     var a = r;
