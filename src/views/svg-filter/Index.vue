@@ -68,7 +68,7 @@
         <filter id="roughpaper" x="0%" y="0%" width="100%" height="100%">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.01"
+            baseFrequency="0.02"
             result="noise"
             numOctaves="10"
           />
@@ -86,7 +86,7 @@
           <!-- 噪声  -->
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.01"
+            baseFrequency="0.02"
             result="noise"
             numOctaves="10"
           />
