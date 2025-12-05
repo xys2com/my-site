@@ -22,7 +22,7 @@ export default function svgAutoGenPlugin(options: Options = {}) {
     svgDir = "./src/assets/svgs",
     outputFile = "./src/assets/simple-svg-data.ts",
     watch = true,
-    cleanDistSvg = true,
+    // cleanDistSvg = true,
   } = options;
 
   let config;
@@ -239,10 +239,10 @@ export default function svgAutoGenPlugin(options: Options = {}) {
         await generateSvgData();
       }
       // 仅在生产构建且启用清理功能时执行
-      if (config.command === "build" && cleanDistSvg) {
-        // await cleanSvgSourceFiles(); // 清除本地源文件
-        // await cleanDistSvgFiles(); // 清除dist svg文件
-      }
+      // if (config.command === "build" && cleanDistSvg) {
+      // await cleanSvgSourceFiles(); // 清除本地源文件
+      // await cleanDistSvgFiles(); // 清除dist svg文件
+      // }
     },
   };
 }

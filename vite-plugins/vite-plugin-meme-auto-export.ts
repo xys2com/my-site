@@ -135,11 +135,6 @@ export default biaoqing;
       if (config.command === "build") {
         await generateIndexFile();
       }
-      // 仅在生产构建且启用清理功能时执行
-      if (config.command === "build" && cleanDistSvg) {
-        // await cleanSvgSourceFiles(); // 清除本地源文件
-        // await cleanDistSvgFiles(); // 清除dist svg文件
-      }
     },
   };
 }
